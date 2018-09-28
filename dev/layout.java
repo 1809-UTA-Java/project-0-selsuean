@@ -24,7 +24,14 @@
  *      
  * Class Account
  *      account number 
- *      
+ * 
+ * 
+ *
+ *
+ * public interface permissionAccess - contains a method to traverse the map->arraylist 
+ * the way to implement employee and bank admin permissions 
+ *
+ * application as an object?     
  */
 
 
