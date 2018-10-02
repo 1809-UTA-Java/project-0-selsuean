@@ -3,6 +3,9 @@ package com.revature.BankingApp;
 public class User extends Person {
 
 	protected String birthday;
+	protected int age;
+	
+	//enum for account type?
 	
 	public User(String name, String username, String password) {
 		super(name, username, password);
