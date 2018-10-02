@@ -1,6 +1,7 @@
 package com.revature.BankingApp;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -12,7 +13,7 @@ import java.util.Scanner;
 public class BankingApp 
 {
 	//arraylist of user objects 
-	static ArrayList<Object> userList = new ArrayList<Object>();
+	static ArrayList<User> userList = new ArrayList<User>();
 	
 	public static void login() {
 		
@@ -26,14 +27,12 @@ public class BankingApp
 		
 		//if they r a new user, goes to newUser method 
 		if (ans.equalsIgnoreCase("y")) {
-			System.out.println("newuser");
 			newUser(sc);
 		}
 		
-		//if not, goes to login page
+		//if not, goes to searchUser page
 		else if (ans.equalsIgnoreCase("n")) {
-			System.out.println("existing user");
-			//TODO: go to logIn();
+			searchUser(sc);
 		}
 		
 		//if does not match accepted inputs, prints declared statement and starts login() method again 
@@ -43,9 +42,71 @@ public class BankingApp
 		}
 	}
 	
+	
+	// takes username and compares it to the user.username field in the user object stored
+	// in an arraylist
+	public static void searchUser(Scanner sc) {
+		String strU = null; 
+		String strP = null;
+		
+		System.out.println("Please login. \n");
+		System.out.println("Enter your username: ");
+		String storeUser = sc.nextLine();
+		
+		System.out.println("Type your password: ");
+		String storePW = sc.nextLine();
+		
+		for (User obj : userList) {
+			strU = ((Person) obj).getUsername();
+			strP = ((Person) obj).getPassword();
+			
+			if (strU.equals(storeUser) && strP.equals(storePW)) {
+				actionPage(obj, sc);
+			}
+			else {
+				System.out.println("Incorrect login. Try again.");
+				searchUser(sc);
+			}
+		}	
+	}
+	
+	
+	public static void actionPage(User currUser, Scanner sc) {
+		
+		System.out.println("Welcome to THE BANK.\n");
+		
+		System.out.println("What would you like to do?\n "
+				+ "1 - View user information.\n"
+				+ "2 - View account information.\n"
+				+ "3 - Apply to create an account.\n"
+				+ "4 - Apply to a joint account.");
+		
+		int ans = sc.nextInt();
+		sc.nextLine();
+		
+		if (ans == 1) {
+			// TODO: display User information
+		}
+		else if (ans == 2) {
+			// TODO: Which account
+		}
+		else if (ans == 3) {
+			// TODO: create application  
+		}
+		else if (ans == 4) {
+			// TODO: create application  
+		}		
+	}
+	
+	
+	public static void actionMoney(User currUser, Scanner sc) {
+		
+	}
+	
+	
 	public static void newUser(Scanner sc) {
 		//creates new User object
-		Person newUser = new User();
+		User newUser = new User();
 		
 		//adds User instance to arrayList
 		userList.add(newUser);
@@ -68,6 +129,11 @@ public class BankingApp
 		//sets User instance username 
 		newUser.username = makeUsername;
 		
+		createPW(sc, newUser);
+	}
+	
+	
+	public static void createPW(Scanner sc, Person user) {
 		System.out.println("Enter your password: ");
 		String makePW = sc.nextLine();
 		
@@ -75,12 +141,15 @@ public class BankingApp
 		String pwCheck = sc.nextLine();
 		
 		if (makePW.equals(pwCheck)) {
-			newUser.password = makePW;
+			user.password = makePW;
+			searchUser(sc);
 		}
 		else {
 			System.out.println("Password does not match. Please try again.");
+			createPW(sc, user);
 		}
 	}
+	
 	
     public static void main( String[] args)    {
     	login();

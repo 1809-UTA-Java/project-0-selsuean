@@ -15,4 +15,16 @@ public abstract class Person {
 	}
 	
 	public Person() {}
+	
+	public String getName() {
+		return this.name;
+	}
+	
+	public String getUsername() {
+		return this.username;
+	}
+	
+	public String getPassword() {
+		return this.password;
+	}
 }
