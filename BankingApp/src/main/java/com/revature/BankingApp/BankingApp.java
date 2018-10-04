@@ -7,10 +7,7 @@ public class BankingApp {
 	// arraylist of user objects
 	static ArrayList<User> userList = new ArrayList<User>();
 
-	public static void login() {
-
-		// new user input reader
-		Scanner sc = new Scanner(System.in);
+	public static void login(Scanner sc) {
 
 		// asks if person is a new user and stores user input in ans
 		System.out.println("Are you a new user? Y/N");
@@ -31,7 +28,7 @@ public class BankingApp {
 		// login() method again
 		else {
 			System.out.println("Wrong input. \nAccepted inputs are: 'y', 'Y', 'n', or 'N'.");
-			login();
+			login(sc);
 		}
 	}
 
@@ -73,24 +70,17 @@ public class BankingApp {
 						+ "5 - Deposit from an account.\n" + "6 - Withdraw from an account.\n" + "7 - Transfer money.");
 
 		int ans = sc.nextInt();
-		// sc.nextLine();
 
 		if (ans == 1) {
-			System.out.println("Name: " + currUser.name + "\n" + "Username: " + currUser.username + "\n" + "Age: "
-					+ currUser.age + "\n" + "Birthday: " + currUser.birthday + "\n" + "City: " + currUser.city + "\n"
-					+ "Number of accounts: " + currUser.getNumAccounts() + "\n");
+			currUser.displayUserInfo();
 
-			// could this possible cause an endless loop?
 			actionPage(currUser, sc);
 
 		} else if (ans == 2) {
 			if (currUser.accountList.size() != 0) {
-				for (Account acc : currUser.accountList) {
-					System.out.println("Account type: " + acc.accountType + "\n" + "Amount: " + acc.amount + "\n"
-							+ "Number of owners: " + acc.numOwner + "\n");
-					acc.getOwners();
+				currUser.displayAccInfo();
 				}
-			} else {
+			else {
 				System.out.println("You have zero accounts.\n");
 			}
 
@@ -119,25 +109,62 @@ public class BankingApp {
 		if (currUser.accountList.isEmpty()) {
 			System.out.println("You currently have no open accounts. \n"
 					+ "Please apply to open an account or await an admin to approve your application.");
+			actionPage(currUser, sc);
 		} else {
 			if (action.equals("deposit")) {
-				System.out.println("");
+				System.out.println("Please enter the account ID of the account you would like to deposit into."
+						+ " Your accounts are listed below. \n");
+				currUser.displayAccInfo();
+				String ans = sc.nextLine();
+				Account thisAcc = currUser.getAccount(ans);
+				
+				System.out.println("How much would you like to deposit?"); 
+				double depAm = sc.nextInt();
+				currUser.depositMoney(thisAcc, depAm);
+				actionPage(currUser, sc);
+				
 			} else if (action.equals("withdraw")) {
-				System.out.println("");
+				System.out.println("Please enter the account ID of the account you would like to withdraw from."
+						+ " Your accounts are listed below. \n");
+				currUser.displayAccInfo();
+				String ans = sc.nextLine();
+				Account thisAcc = currUser.getAccount(ans);
+				
+				System.out.println("How much would you like to deposit?"); 
+				double withAm = sc.nextInt();
+				if ((thisAcc.amount - withAm) < 0) {
+					System.out.println("Withdrawing this amount will make your account balance negative. Please withdraw a smaller amount or deposit more money into this account first \n");
+					actionPage(currUser, sc);
+				}
+				else {
+					currUser.withdrawMoney(thisAcc, withAm);
+				}
+				
+				
 			} else if (action.equals("transfer")) {
-				System.out.println("");
+				System.out.println("Please enter the account ID of the account you would like to transfer from."
+						+ " Your accounts are listed below. \n");
+				currUser.displayAccInfo();
+				String transF = sc.nextLine();
+				Account accSource = currUser.getAccount(transF);
+				//check if there's enough money in accSource to transfer
+				
+				System.out.println("Please enter the account ID of the account you would like to transfer to."
+						+ " Your accounts are listed below. \n");
+				currUser.displayAccInfo();
+				String transT = sc.nextLine();
+				Account accDest = currUser.getAccount(transT);
+				//TODO: finish 
 			}
 		}
 	}
 
+
 	public static void newUser(Scanner sc) {
-		// creates new User object
 		User newUser = new User();
 
-		// adds User instance to arrayList
 		userList.add(newUser);
 
-		// gets name
 		System.out.println("What is your full name?");
 		String makeName = sc.nextLine();
 		newUser.name = makeName;
@@ -145,7 +172,6 @@ public class BankingApp {
 	}
 
 	public static void newUsername(User currUser, Scanner sc) {
-		// gets username; if there are spaces, removes spaces from string
 		System.out.println("Enter your username:");
 		String makeUsername = sc.nextLine();
 		makeUsername = makeUsername.replaceAll("\\s", "");
@@ -156,7 +182,6 @@ public class BankingApp {
 			System.out.print("Your username is: " + makeUsername
 					+ ". \nIf there were any whitespaces included in your entry, " + "they have been removed.\n");
 
-			// sets User instance username
 			currUser.username = makeUsername;
 
 			createPW(sc, currUser);
@@ -222,6 +247,9 @@ public class BankingApp {
 	}
 
 	public static void main(String[] args) {
-		login();
+		// new user input reader
+		Scanner sc = new Scanner(System.in);
+		login(sc);
+		System.out.println("Exiting application. Thank you for choosing THE BANK.");
 	}
 }

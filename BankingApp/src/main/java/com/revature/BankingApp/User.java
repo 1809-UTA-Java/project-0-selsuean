@@ -4,44 +4,46 @@ import java.util.ArrayList;
 
 public class User extends Person {
 
+	protected int userID;
 	protected String birthday;
 	protected int age;
 	protected String city;
 	protected ArrayList<Account> accountList = new ArrayList<Account>();
 	protected static ArrayList<Application> appList = new ArrayList<Application>();
 	
-	//enum for account type?
-	
-//	public User(String name, String username, String password) {
-//		super(name, username, password);
-//		// TODO Auto-generated constructor stub
-//	}
 
 	public User() {} 
 	
-	//new User instance automatically sets up user with a new checkings account 
-//	public void newAccount(String username) {
-//		Account newAcc = new Account(); 
-//		accountList.add(newAcc);
-//		newAcc.accountType = "Checkings";
-//		newAcc.amount = 0;
-//		newAcc.owner[0] = username;
-//		newAcc.numOwner = 1;
-//	}
-	
-//	public void addAccount(String username, String accountType) {
-//		Account addAcc = new Account();
-//		accountList.add(addAcc);
-//		addAcc.accountType = accountType;
-//		addAcc.amount = 0;
-//		addAcc.owner[0] = username;
-//		addAcc.numOwner = 1;
-//	}
 	public void createApplication(String aType) {
 		Application newApp = new Application();
 		newApp.appType = aType;
 		newApp.approved = false;
 		appList.add(newApp);
+	}
+	
+	public void displayUserInfo() {
+		System.out.println("Name: " + this.name + "\n" + "Username: " + this.username + "\n" + "Age: "
+				+ this.age + "\n" + "Birthday: " + this.birthday + "\n" + "City: " + this.city + "\n"
+				+ "Number of accounts: " + this.getNumAccounts() + "\n");
+	}
+	
+	public void displayAccInfo() {
+		for (Account acc : this.accountList) {
+			System.out.println("Account type: " + acc.accountType + "\n" + "Amount: " + acc.amount + "\n"
+					+ "Number of owners: " + acc.numOwner + "\n ");
+			acc.getOwners();
+		}
+	}
+	
+	public Account getAccount(String accID) {
+		for (Account acc : this.accountList) {
+			if (acc.accountID.equals(accID)) {
+				return acc;
+			}
+		}
+		
+		System.out.println("There are no accounts under your user with this acount ID.");
+		return null;
 	}
 	
 	public int getNumAccounts() {
