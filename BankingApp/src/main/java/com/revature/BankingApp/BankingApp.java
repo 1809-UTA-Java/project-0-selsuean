@@ -3,12 +3,6 @@ package com.revature.BankingApp;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-/**
- * Hello world!
- * 
- * hello 
- *
- */
 public class BankingApp {
 	// arraylist of user objects
 	static ArrayList<User> userList = new ArrayList<User>();
@@ -74,39 +68,66 @@ public class BankingApp {
 		System.out.println("Welcome to THE BANK.\n");
 
 		System.out.println(
-				"What would you like to do?\n " + "1 - View user information.\n" + "2 - View account information.\n"
-						+ "3 - Apply to create an account.\n" + "4 - Apply to a joint account.");
+				"What would you like to do?\n" + "1 - View user information.\n" + "2 - View account information.\n"
+						+ "3 - Apply to create an account.\n" + "4 - Apply to a joint account.\n"
+						+ "5 - Deposit from an account.\n" + "6 - Withdraw from an account.\n" + "7 - Transfer money.");
 
 		int ans = sc.nextInt();
-		sc.nextLine();
+		// sc.nextLine();
 
 		if (ans == 1) {
 			System.out.println("Name: " + currUser.name + "\n" + "Username: " + currUser.username + "\n" + "Age: "
 					+ currUser.age + "\n" + "Birthday: " + currUser.birthday + "\n" + "City: " + currUser.city + "\n"
-			// TODO: + "Number of accounts: " + currUser.getNumAccounts() + "\n"
-			);
+					+ "Number of accounts: " + currUser.getNumAccounts() + "\n");
+
+			// could this possible cause an endless loop?
+			actionPage(currUser, sc);
+
 		} else if (ans == 2) {
-			for (Account acc : currUser.accountList) {
-				System.out.println("Account type: " + acc.accountType + "\n" + "Amount: " + acc.amount + "\n"
-						+ "Number of owners: " + acc.numOwner + "\n");
-				acc.getOwners();
+			if (currUser.accountList.size() != 0) {
+				for (Account acc : currUser.accountList) {
+					System.out.println("Account type: " + acc.accountType + "\n" + "Amount: " + acc.amount + "\n"
+							+ "Number of owners: " + acc.numOwner + "\n");
+					acc.getOwners();
+				}
+			} else {
+				System.out.println("You have zero accounts.\n");
 			}
 
+			actionPage(currUser, sc);
+
 		} else if (ans == 3) {
-			// TODO: create application
-			createApplication("normal", currUser);
+			// TODO: terminal dialogue
+			currUser.createApplication("Normal");
+
 		} else if (ans == 4) {
-			// TODO: create application
-			createApplication("joint", currUser);
+			// TODO: terminal dialogue
+			currUser.createApplication("Joint");
+		} else if (ans == 5) {
+			actionMoney("deposit", currUser, sc);
+		} else if (ans == 6) {
+			actionMoney("withdraw", currUser, sc);
+		} else if (ans == 7) {
+			actionMoney("transfer", currUser, sc);
+		} else {
+			System.out.println("Input out of range. Please enter numbers 1-7 according to your desired action.\n");
+			actionPage(currUser, sc);
 		}
 	}
 
-	public static void createApplication(String appType, User u) {
-		// TODO: create
-	}
-
-	public static void actionMoney(User currUser, Scanner sc) {
-
+	public static void actionMoney(String action, User currUser, Scanner sc) {
+		if (currUser.accountList.isEmpty()) {
+			System.out.println("You currently have no open accounts. \n"
+					+ "Please apply to open an account or await an admin to approve your application.");
+		} else {
+			if (action.equals("deposit")) {
+				System.out.println("");
+			} else if (action.equals("withdraw")) {
+				System.out.println("");
+			} else if (action.equals("transfer")) {
+				System.out.println("");
+			}
+		}
 	}
 
 	public static void newUser(Scanner sc) {
@@ -120,10 +141,10 @@ public class BankingApp {
 		System.out.println("What is your full name?");
 		String makeName = sc.nextLine();
 		newUser.name = makeName;
-		fillUserInfo(newUser, sc);
+		newUsername(newUser, sc);
 	}
 
-	public static void fillUserInfo(User currUser, Scanner sc) {
+	public static void newUsername(User currUser, Scanner sc) {
 		// gets username; if there are spaces, removes spaces from string
 		System.out.println("Enter your username:");
 		String makeUsername = sc.nextLine();
@@ -141,9 +162,12 @@ public class BankingApp {
 			createPW(sc, currUser);
 		} else {
 			System.out.println("That username has already been taken, please try a different username. \n");
-			fillUserInfo(currUser, sc);
+			newUsername(currUser, sc);
 		}
 
+	}
+
+	public static void fillUserInfo(User currUser, Scanner sc) {
 		// birthday
 		System.out.println("What is your birthday month and day?");
 		String makeBday = sc.nextLine();
@@ -155,10 +179,14 @@ public class BankingApp {
 		currUser.age = makeAge;
 
 		// city
+		sc.nextLine();
 		System.out.println("What is your current city?");
 		String makeCity = sc.nextLine();
 		currUser.city = makeCity;
 
+		System.out.println("User successfully added to system. \n");
+
+		searchUser(sc);
 	}
 
 	public static boolean checkAvailability(String input) {
@@ -172,13 +200,12 @@ public class BankingApp {
 			} else {
 				return true;
 			}
-
 		}
 
 		return avail;
 	}
 
-	public static void createPW(Scanner sc, Person user) {
+	public static void createPW(Scanner sc, User user) {
 		System.out.println("Enter your password: ");
 		String makePW = sc.nextLine();
 
@@ -187,7 +214,7 @@ public class BankingApp {
 
 		if (makePW.equals(pwCheck)) {
 			user.password = makePW;
-			searchUser(sc);
+			fillUserInfo(user, sc);
 		} else {
 			System.out.println("Password does not match. Please try again.");
 			createPW(sc, user);

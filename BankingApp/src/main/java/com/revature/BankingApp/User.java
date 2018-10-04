@@ -7,7 +7,8 @@ public class User extends Person {
 	protected String birthday;
 	protected int age;
 	protected String city;
-	protected ArrayList<Account> accountList;
+	protected ArrayList<Account> accountList = new ArrayList<Account>();
+	protected static ArrayList<Application> appList = new ArrayList<Application>();
 	
 	//enum for account type?
 	
@@ -19,22 +20,28 @@ public class User extends Person {
 	public User() {} 
 	
 	//new User instance automatically sets up user with a new checkings account 
-	public void newAccount(String username) {
-		Account newAcc = new Account(); 
-		accountList.add(newAcc);
-		newAcc.accountType = "Checkings";
-		newAcc.amount = 0;
-		newAcc.owner[0] = username;
-		newAcc.numOwner = 1;
-	}
+//	public void newAccount(String username) {
+//		Account newAcc = new Account(); 
+//		accountList.add(newAcc);
+//		newAcc.accountType = "Checkings";
+//		newAcc.amount = 0;
+//		newAcc.owner[0] = username;
+//		newAcc.numOwner = 1;
+//	}
 	
-	public void addAccount(String username, String accountType) {
-		Account addAcc = new Account();
-		accountList.add(addAcc);
-		addAcc.accountType = accountType;
-		addAcc.amount = 0;
-		addAcc.owner[0] = username;
-		addAcc.numOwner = 1;
+//	public void addAccount(String username, String accountType) {
+//		Account addAcc = new Account();
+//		accountList.add(addAcc);
+//		addAcc.accountType = accountType;
+//		addAcc.amount = 0;
+//		addAcc.owner[0] = username;
+//		addAcc.numOwner = 1;
+//	}
+	public void createApplication(String aType) {
+		Application newApp = new Application();
+		newApp.appType = aType;
+		newApp.approved = false;
+		appList.add(newApp);
 	}
 	
 	public int getNumAccounts() {
