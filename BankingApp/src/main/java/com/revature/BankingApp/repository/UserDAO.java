@@ -1,0 +1,124 @@
+package com.revature.BankingApp.repository;
+
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import com.revature.BankingApp.Account;
+import com.revature.BankingApp.User;
+import com.revature.BankingApp.db.ConnectionUtil;
+
+public class UserDAO {
+	
+	/**
+	 * User object passed into method gets inserted into db 
+	 */
+	public String insertUser(User usr) {
+		PreparedStatement ps = null;
+		
+		try (Connection conn = ConnectionUtil.getConnection()) {
+			String sql = "INSERT INTO Users VALUES (?,?,?,?)";
+			ps = conn.prepareStatement(sql);
+			
+			ps.setInt(1, usr.getUserID());
+			ps.setString(2, usr.getBirthday());
+			ps.setInt(3, usr.getAge());
+			ps.setString(4, usr.getCity());
+			
+			ps.executeUpdate();;
+			ps.close();
+		} catch (SQLException ex) {
+			ex.getMessage();
+		} catch (IOException ex) {
+			ex.getMessage();
+		}
+		return usr.getName() + " inserted into system.";
+	}
+	
+	
+	/**
+	 * Method to return a User object that matches the username of the passed in usr object 
+	 * 
+	 * public User(String name, String username, String password, int userID, 
+	 * String birthday, int age, String city)
+	 * 
+	 * @param usr
+	 * @return u
+	 */
+	public User checkForUser(User usr) {
+		PreparedStatement ps = null;
+		User u = null; 
+		
+		try (Connection conn = ConnectionUtil.getConnection()) {
+			String sql = "SELECT * FROM USERS WHERE USERNAME = ?";
+			ps = conn.prepareStatement(sql);
+			
+			ps.setString(1, usr.getUsername());
+			ResultSet rs = ps.executeQuery();
+			
+			while (rs.next()) {
+				String name = rs.getString("name");
+				String username = rs.getString("username");
+				String password = rs.getString("password");
+				int userID = rs.getInt("userID");
+				String birthday = rs.getString("birthday");
+				int age = rs.getInt("age");
+				String city = rs.getString("city");
+				
+				u = new User(name, username, password, userID, birthday, age, city);
+			}
+			
+			rs.close();
+			ps.close();			
+			
+		} catch (SQLException ex) {
+			ex.getMessage();
+		} catch (IOException ex) {
+			ex.getMessage();
+		}
+		
+		return u;
+	}
+	
+	
+	/**
+	 *  
+	 * public Account(String accountID, String accountType, double amount)
+	 * 
+	 * @param usrID
+	 * @return a
+	 */
+	public Account checkForAccount(String usrID) {
+		PreparedStatement ps = null;
+		Account a = null;
+		
+		try (Connection conn = ConnectionUtil.getConnection())  {
+			String sql = "SELECT * FROM ACCOUNTS WHERE USERID = ?";
+			ps = conn.prepareStatement(sql);
+			
+			ps.setString(1, usrID);
+			ResultSet rs = ps.executeQuery();
+			
+			while (rs.next()) {
+				String accountID = rs.getString("accountID");
+				String accountType = rs.getString("accountType");
+				double amount = rs.getDouble("amount");
+				
+				a = new Account(accountID, accountType, amount);
+			}
+			
+			rs.close();
+			ps.close();
+			
+		} catch (SQLException ex) {
+			ex.getMessage();
+		} catch (IOException ex) {
+			ex.getMessage();
+		}
+		
+		return a;
+	}
+
+}

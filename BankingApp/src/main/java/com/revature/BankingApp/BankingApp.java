@@ -3,38 +3,36 @@ package com.revature.BankingApp;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import com.revature.BankingApp.repository.UserDAO;
+
 public class BankingApp {
-	// arraylist of user objects
 	static ArrayList<User> userList = new ArrayList<User>();
 
 	public static void login(Scanner sc) {
 
-		// asks if person is a new user and stores user input in ans
 		System.out.println("Are you a new user? Y/N");
 		String ans = sc.next();
 		sc.nextLine();
 
-		// if they r a new user, goes to newUser method
 		if (ans.equalsIgnoreCase("y")) {
 			newUser(sc);
 		}
 
-		// if not, goes to searchUser page
 		else if (ans.equalsIgnoreCase("n")) {
 			searchUser(sc);
 		}
 
-		// if does not match accepted inputs, prints declared statement and starts
-		// login() method again
 		else {
 			System.out.println("Wrong input. \nAccepted inputs are: 'y', 'Y', 'n', or 'N'.");
 			login(sc);
 		}
 	}
 
-	// takes username and compares it to the user.username field in the user object
-	// stored
-	// in an arraylist
+	/**
+	 * 
+	 * 
+	 * @param sc
+	 */
 	public static void searchUser(Scanner sc) {
 		String strU = null;
 		String strP = null;
@@ -210,6 +208,8 @@ public class BankingApp {
 		currUser.city = makeCity;
 
 		System.out.println("User successfully added to system. \n");
+		UserDAO udao = new UserDAO();
+		System.out.println(udao.insertUser(currUser));
 
 		searchUser(sc);
 	}

@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 public class User extends Person {
 
+	protected String name;
+	protected String username;
+	protected String password;
 	protected int userID;
 	protected String birthday;
 	protected int age;
@@ -12,8 +15,94 @@ public class User extends Person {
 	protected static ArrayList<Application> appList = new ArrayList<Application>();
 	
 
-	public User() {} 
+	public User() {	} 
+		
 	
+	public User(String name, String username, String password, int userID, String birthday, int age, String city) {
+		super();
+		this.name = name;
+		this.username = username;
+		this.password = password;
+		this.userID = userID;
+		this.birthday = birthday;
+		this.age = age;
+		this.city = city;
+	}
+
+
+
+	public String getName() {
+		return name;
+	}
+
+
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+
+
+	public String getUsername() {
+		return username;
+	}
+
+
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+
+
+	public int getUserID() {
+		return userID;
+	}
+
+
+
+	public void setUserID(int userID) {
+		this.userID = userID;
+	}
+
+
+
+	public String getBirthday() {
+		return birthday;
+	}
+
+
+
+	public void setBirthday(String birthday) {
+		this.birthday = birthday;
+	}
+
+
+
+	public int getAge() {
+		return age;
+	}
+
+
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+
+
+	public String getCity() {
+		return city;
+	}
+
+
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+
+
 	public void createApplication(String aType) {
 		Application newApp = new Application();
 		newApp.appType = aType;
