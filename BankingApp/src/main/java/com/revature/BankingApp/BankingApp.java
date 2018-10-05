@@ -7,8 +7,8 @@ import com.revature.BankingApp.repository.UserDAO;
 
 public class BankingApp {
 	static ArrayList<User> userList = new ArrayList<User>();
-
-	public static void login(Scanner sc) {
+	
+ 	public static void login(Scanner sc) {
 
 		System.out.println("Are you a new user? Y/N");
 		String ans = sc.next();
@@ -34,8 +34,8 @@ public class BankingApp {
 	 * @param sc
 	 */
 	public static void searchUser(Scanner sc) {
-		String strU = null;
-		String strP = null;
+//		String strU = null;
+//		String strP = null;
 
 		System.out.println("Please login. \n");
 		System.out.println("Enter your username: ");
@@ -43,19 +43,31 @@ public class BankingApp {
 
 		System.out.println("Type your password: ");
 		String storePW = sc.nextLine();
-
-		for (User obj : userList) {
-			strU = obj.getUsername();
-			strP = obj.getPassword();
-
-			if (strU.equals(storeUser) && strP.equals(storePW)) {
-
-				actionPage(obj, sc);
-			} else {
-				System.out.println("Incorrect login. Try again.");
-				searchUser(sc);
-			}
+		
+		UserDAO uDAO = new UserDAO();
+		User u = uDAO.checkForUser(storeUser);
+		
+		//if username does not match
+		if (u == null) {
+			System.out.println("Incorrect login, please try again.");
+			searchUser(sc);
 		}
+		else if (u.password.equals(storePW)) {
+			actionPage(u, sc);
+		}
+		
+//		for (User obj : userList) {
+//			strU = obj.getUsername();
+//			strP = obj.getPassword();
+//
+//			if (strU.equals(storeUser) && strP.equals(storePW)) {
+//
+//				actionPage(obj, sc);
+//			} else {
+//				System.out.println("Incorrect login. Try again.");
+//				searchUser(sc);
+//			}
+//		}
 	}
 
 	public static void actionPage(User currUser, Scanner sc) {
@@ -77,8 +89,7 @@ public class BankingApp {
 		} else if (ans == 2) {
 			if (currUser.accountList.size() != 0) {
 				currUser.displayAccInfo();
-				}
-			else {
+			} else {
 				System.out.println("You have zero accounts.\n");
 			}
 
@@ -115,48 +126,46 @@ public class BankingApp {
 				currUser.displayAccInfo();
 				String ans = sc.nextLine();
 				Account thisAcc = currUser.getAccount(ans);
-				
-				System.out.println("How much would you like to deposit?"); 
+
+				System.out.println("How much would you like to deposit?");
 				double depAm = sc.nextInt();
 				currUser.depositMoney(thisAcc, depAm);
 				actionPage(currUser, sc);
-				
+
 			} else if (action.equals("withdraw")) {
 				System.out.println("Please enter the account ID of the account you would like to withdraw from."
 						+ " Your accounts are listed below. \n");
 				currUser.displayAccInfo();
 				String ans = sc.nextLine();
 				Account thisAcc = currUser.getAccount(ans);
-				
-				System.out.println("How much would you like to deposit?"); 
+
+				System.out.println("How much would you like to deposit?");
 				double withAm = sc.nextInt();
 				if ((thisAcc.amount - withAm) < 0) {
-					System.out.println("Withdrawing this amount will make your account balance negative. Please withdraw a smaller amount or deposit more money into this account first \n");
+					System.out.println(
+							"Withdrawing this amount will make your account balance negative. Please withdraw a smaller amount or deposit more money into this account first \n");
 					actionPage(currUser, sc);
-				}
-				else {
+				} else {
 					currUser.withdrawMoney(thisAcc, withAm);
 				}
-				
-				
+
 			} else if (action.equals("transfer")) {
 				System.out.println("Please enter the account ID of the account you would like to transfer from."
 						+ " Your accounts are listed below. \n");
 				currUser.displayAccInfo();
 				String transF = sc.nextLine();
 				Account accSource = currUser.getAccount(transF);
-				//check if there's enough money in accSource to transfer
-				
+				// check if there's enough money in accSource to transfer
+
 				System.out.println("Please enter the account ID of the account you would like to transfer to."
 						+ " Your accounts are listed below. \n");
 				currUser.displayAccInfo();
 				String transT = sc.nextLine();
 				Account accDest = currUser.getAccount(transT);
-				//TODO: finish 
+				// TODO: finish
 			}
 		}
 	}
-
 
 	public static void newUser(Scanner sc) {
 		User newUser = new User();
@@ -170,6 +179,7 @@ public class BankingApp {
 	}
 
 	public static void newUsername(User currUser, Scanner sc) {
+
 		System.out.println("Enter your username:");
 		String makeUsername = sc.nextLine();
 		makeUsername = makeUsername.replaceAll("\\s", "");
@@ -188,6 +198,23 @@ public class BankingApp {
 			newUsername(currUser, sc);
 		}
 
+	}
+
+	
+	public static void createPW(Scanner sc, User user) {
+		System.out.println("Enter your password: ");
+		String makePW = sc.nextLine();
+
+		System.out.println("Enter your password again: ");
+		String pwCheck = sc.nextLine();
+
+		if (makePW.equals(pwCheck)) {
+			user.password = makePW;
+			fillUserInfo(user, sc);
+		} else {
+			System.out.println("Password does not match. Please try again.");
+			createPW(sc, user);
+		}
 	}
 
 	public static void fillUserInfo(User currUser, Scanner sc) {
@@ -216,43 +243,27 @@ public class BankingApp {
 
 	public static boolean checkAvailability(String input) {
 		boolean avail = true;
-		
-//		UserDAO uDAO = new UserDAO();
-//		User u = uDAO.checkForUser(input);
-//		if (u == null) {
-//			return true;
-//		}
-//		else if (u != null) {
-//			return false;
-//		}
 
-		for (User iUser : userList) {
-			if (userList.size() != 1) {
-				if (iUser.username.equals(input)) {
-					return false;
-				}
-			} else {
-				return true;
-			}
+		UserDAO uDAO = new UserDAO();
+		User u = uDAO.checkForUser(input);
+		if (u == null) {
+			return true;
 		}
+		else if (u != null) {
+			return false;
+		}
+
+//		for (User iUser : userList) {
+//			if (userList.size() != 1) {
+//				if (iUser.username.equals(input)) {
+//					return false;
+//				}
+//			} else {
+//				return true;
+//			}
+//		}
 
 		return avail;
-	}
-
-	public static void createPW(Scanner sc, User user) {
-		System.out.println("Enter your password: ");
-		String makePW = sc.nextLine();
-
-		System.out.println("Enter your password again: ");
-		String pwCheck = sc.nextLine();
-
-		if (makePW.equals(pwCheck)) {
-			user.password = makePW;
-			fillUserInfo(user, sc);
-		} else {
-			System.out.println("Password does not match. Please try again.");
-			createPW(sc, user);
-		}
 	}
 
 	public static void main(String[] args) {
