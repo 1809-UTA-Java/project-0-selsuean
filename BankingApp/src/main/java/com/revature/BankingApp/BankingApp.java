@@ -45,8 +45,8 @@ public class BankingApp {
 		String storePW = sc.nextLine();
 
 		for (User obj : userList) {
-			strU = ((Person) obj).getUsername();
-			strP = ((Person) obj).getPassword();
+			strU = obj.getUsername();
+			strP = obj.getPassword();
 
 			if (strU.equals(storeUser) && strP.equals(storePW)) {
 
@@ -216,6 +216,15 @@ public class BankingApp {
 
 	public static boolean checkAvailability(String input) {
 		boolean avail = true;
+		
+//		UserDAO uDAO = new UserDAO();
+//		User u = uDAO.checkForUser(input);
+//		if (u == null) {
+//			return true;
+//		}
+//		else if (u != null) {
+//			return false;
+//		}
 
 		for (User iUser : userList) {
 			if (userList.size() != 1) {

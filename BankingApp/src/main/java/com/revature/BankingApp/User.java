@@ -2,15 +2,15 @@ package com.revature.BankingApp;
 
 import java.util.ArrayList;
 
-public class User extends Person {
+public class User {
 
 	protected String name;
 	protected String username;
 	protected String password;
-	protected int userID;
 	protected String birthday;
 	protected int age;
 	protected String city;
+	
 	protected ArrayList<Account> accountList = new ArrayList<Account>();
 	protected static ArrayList<Application> appList = new ArrayList<Application>();
 	
@@ -18,12 +18,11 @@ public class User extends Person {
 	public User() {	} 
 		
 	
-	public User(String name, String username, String password, int userID, String birthday, int age, String city) {
+	public User(String name, String username, String password, String birthday, int age, String city) {
 		super();
 		this.name = name;
 		this.username = username;
 		this.password = password;
-		this.userID = userID;
 		this.birthday = birthday;
 		this.age = age;
 		this.city = city;
@@ -40,6 +39,16 @@ public class User extends Person {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public String getPassword() {
+		return password;
+	}
+
+
+
+	public void getPassword(String password) {
+		this.password = password;
+	}
 
 
 
@@ -51,18 +60,6 @@ public class User extends Person {
 
 	public void setUsername(String username) {
 		this.username = username;
-	}
-
-
-
-	public int getUserID() {
-		return userID;
-	}
-
-
-
-	public void setUserID(int userID) {
-		this.userID = userID;
 	}
 
 

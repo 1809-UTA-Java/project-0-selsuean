@@ -14,18 +14,25 @@ public class UserDAO {
 	
 	/**
 	 * User object passed into method gets inserted into db 
+	 * 
+	 * Columns: username (PK), password, name, age, birthday, city
+	 * 
+	 * @param usr
+	 * @return usr.getName() + " inserted into system."
 	 */
 	public String insertUser(User usr) {
 		PreparedStatement ps = null;
 		
 		try (Connection conn = ConnectionUtil.getConnection()) {
-			String sql = "INSERT INTO Users VALUES (?,?,?,?)";
+			String sql = "INSERT INTO Users VALUES (?,?,?,?,?,?)";
 			ps = conn.prepareStatement(sql);
 			
-			ps.setInt(1, usr.getUserID());
-			ps.setString(2, usr.getBirthday());
-			ps.setInt(3, usr.getAge());
-			ps.setString(4, usr.getCity());
+			ps.setString(1, usr.getUsername());
+			ps.setString(2, usr.getPassword());
+			ps.setString(3, usr.getName());
+			ps.setInt(4, usr.getAge());
+			ps.setString(5, usr.getBirthday());
+			ps.setString(6, usr.getCity());
 			
 			ps.executeUpdate();;
 			ps.close();
@@ -47,7 +54,7 @@ public class UserDAO {
 	 * @param usr
 	 * @return u
 	 */
-	public User checkForUser(User usr) {
+	public User checkForUser(String identifier) {
 		PreparedStatement ps = null;
 		User u = null; 
 		
@@ -55,19 +62,18 @@ public class UserDAO {
 			String sql = "SELECT * FROM USERS WHERE USERNAME = ?";
 			ps = conn.prepareStatement(sql);
 			
-			ps.setString(1, usr.getUsername());
+			ps.setString(1, identifier);
 			ResultSet rs = ps.executeQuery();
 			
 			while (rs.next()) {
 				String name = rs.getString("name");
 				String username = rs.getString("username");
 				String password = rs.getString("password");
-				int userID = rs.getInt("userID");
 				String birthday = rs.getString("birthday");
 				int age = rs.getInt("age");
 				String city = rs.getString("city");
 				
-				u = new User(name, username, password, userID, birthday, age, city);
+				u = new User(name, username, password, birthday, age, city);
 			}
 			
 			rs.close();
@@ -90,18 +96,19 @@ public class UserDAO {
 	 * @param usrID
 	 * @return a
 	 */
-	public Account checkForAccount(String usrID) {
+	public Account checkForAccount(String username) {
 		PreparedStatement ps = null;
 		Account a = null;
 		
 		try (Connection conn = ConnectionUtil.getConnection())  {
-			String sql = "SELECT * FROM ACCOUNTS WHERE USERID = ?";
+			String sql = "SELECT * FROM ACCOUNTS WHERE USERNAME = ?";
 			ps = conn.prepareStatement(sql);
 			
-			ps.setString(1, usrID);
+			ps.setString(1, username);
 			ResultSet rs = ps.executeQuery();
 			
 			while (rs.next()) {
+				
 				String accountID = rs.getString("accountID");
 				String accountType = rs.getString("accountType");
 				double amount = rs.getDouble("amount");
