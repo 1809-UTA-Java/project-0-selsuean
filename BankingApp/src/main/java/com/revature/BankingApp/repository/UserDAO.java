@@ -6,7 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.revature.BankingApp.Account;
 import com.revature.BankingApp.User;
 import com.revature.BankingApp.db.ConnectionUtil;
 
@@ -86,46 +85,6 @@ public class UserDAO {
 		}
 		
 		return u;
-	}
-	
-	
-	/**
-	 *  
-	 * public Account(String accountID, String accountType, double amount)
-	 * 
-	 * @param usrID
-	 * @return a
-	 */
-	public Account checkForAccount(String username) {
-		PreparedStatement ps = null;
-		Account a = null;
-		
-		try (Connection conn = ConnectionUtil.getConnection())  {
-			String sql = "SELECT * FROM ACCOUNTS WHERE USERNAME = ?";
-			ps = conn.prepareStatement(sql);
-			
-			ps.setString(1, username);
-			ResultSet rs = ps.executeQuery();
-			
-			while (rs.next()) {
-				
-				String accountID = rs.getString("accountID");
-				String accountType = rs.getString("accountType");
-				double amount = rs.getDouble("amount");
-				
-				a = new Account(accountID, accountType, amount);
-			}
-			
-			rs.close();
-			ps.close();
-			
-		} catch (SQLException ex) {
-			ex.getMessage();
-		} catch (IOException ex) {
-			ex.getMessage();
-		}
-		
-		return a;
 	}
 
 }

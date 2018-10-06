@@ -8,7 +8,7 @@ package com.revature.BankingApp;
 public class Admin extends Person {
 
 	
-	public void approveAccount() {
+	public void createNewAccount(boolean approved) {
 		
 	}
 	

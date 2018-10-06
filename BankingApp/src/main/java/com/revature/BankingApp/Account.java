@@ -1,9 +1,10 @@
 package com.revature.BankingApp;
 
 public class Account {
-	protected String accountID;
+	protected int accountID;
 	protected String accountType;
 	protected double amount;
+	
 	protected String[] owner;
 	protected int numOwner;
 	
@@ -11,10 +12,47 @@ public class Account {
 	
 	
 	
-	public Account(String accountID, String accountType, double amount) {
+	public Account(int accountID, String accountType, double amount) {
 		super();
 		this.accountID = accountID;
 		this.accountType = accountType;
+		this.amount = amount;
+	}
+
+	
+
+
+	public int getAccountID() {
+		return accountID;
+	}
+
+
+
+	public void setAccountID(int accountID) {
+		this.accountID = accountID;
+	}
+
+
+
+	public String getAccountType() {
+		return accountType;
+	}
+
+
+
+	public void setAccountType(String accountType) {
+		this.accountType = accountType;
+	}
+
+
+
+	public double getAmount() {
+		return amount;
+	}
+
+
+
+	public void setAmount(double amount) {
 		this.amount = amount;
 	}
 

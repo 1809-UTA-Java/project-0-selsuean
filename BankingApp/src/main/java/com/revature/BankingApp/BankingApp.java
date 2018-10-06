@@ -53,7 +53,12 @@ public class BankingApp {
 			searchUser(sc);
 		}
 		else if (u.password.equals(storePW)) {
+			u.setAccountList(storeUser);
 			actionPage(u, sc);
+		}
+		else if (!u.password.equals(storePW)) {
+			System.out.println("Incorrect login, please try again.");
+			searchUser(sc);
 		}
 		
 //		for (User obj : userList) {
@@ -124,7 +129,7 @@ public class BankingApp {
 				System.out.println("Please enter the account ID of the account you would like to deposit into."
 						+ " Your accounts are listed below. \n");
 				currUser.displayAccInfo();
-				String ans = sc.nextLine();
+				int ans = sc.nextInt();
 				Account thisAcc = currUser.getAccount(ans);
 
 				System.out.println("How much would you like to deposit?");
@@ -136,7 +141,7 @@ public class BankingApp {
 				System.out.println("Please enter the account ID of the account you would like to withdraw from."
 						+ " Your accounts are listed below. \n");
 				currUser.displayAccInfo();
-				String ans = sc.nextLine();
+				int ans = sc.nextInt();
 				Account thisAcc = currUser.getAccount(ans);
 
 				System.out.println("How much would you like to deposit?");
@@ -153,14 +158,14 @@ public class BankingApp {
 				System.out.println("Please enter the account ID of the account you would like to transfer from."
 						+ " Your accounts are listed below. \n");
 				currUser.displayAccInfo();
-				String transF = sc.nextLine();
+				int transF = sc.nextInt();
 				Account accSource = currUser.getAccount(transF);
 				// check if there's enough money in accSource to transfer
 
 				System.out.println("Please enter the account ID of the account you would like to transfer to."
 						+ " Your accounts are listed below. \n");
 				currUser.displayAccInfo();
-				String transT = sc.nextLine();
+				int transT = sc.nextInt();
 				Account accDest = currUser.getAccount(transT);
 				// TODO: finish
 			}
