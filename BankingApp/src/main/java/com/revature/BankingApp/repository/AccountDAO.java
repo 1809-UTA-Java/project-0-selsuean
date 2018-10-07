@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.revature.BankingApp.Account;
+import com.revature.BankingApp.User;
 import com.revature.BankingApp.db.ConnectionUtil;
 
 public class AccountDAO {
@@ -48,11 +49,11 @@ public class AccountDAO {
 		List<Account> accounts = new ArrayList<>();
 
 		try (Connection conn = ConnectionUtil.getConnection()) {
-			String sql = "SELECT Accounts.* FROM Accounts INNER JOIN Junction ON Accounts.accountID = Junction.username WHERE Junction.username = ?";
+			String sql = "SELECT Accounts.* FROM Accounts INNER JOIN Junction ON Accounts.accountID = Junction.accountID WHERE Junction.username = ?";
 			// SELECT Accounts.*
 			// FROM Accounts
 			// INNER JOIN Junction
-			// ON Accounts.accountID = Junction.username
+			// ON Accounts.accountID = Junction.accountID
 			// WHERE Junction.username = ?
 			ps = conn.prepareStatement(sql);
 
@@ -79,6 +80,44 @@ public class AccountDAO {
 		}
 
 		return accounts;
+	}
+	
+	public List<String> getOwners(int accountID) {
+		PreparedStatement ps = null;
+	//	User u = null;
+		List<String> owners = new ArrayList<>();
+
+		try (Connection conn = ConnectionUtil.getConnection()) {
+			String sql = "SELECT Users.name FROM Users INNER JOIN Junction ON Users.username = Junction.username WHERE Junction.accountID = ?";
+			
+			ps = conn.prepareStatement(sql);
+
+			ps.setInt(1, accountID);
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+
+				String name = rs.getString("name");
+//				String username = rs.getString("username");
+//				String password = rs.getString("password");
+//				String birthday = rs.getString("birthday");
+//				int age = rs.getInt("age");
+//				String city = rs.getString("city");
+
+				//u = new User(name, username, password, birthday, age, city);
+				owners.add(name);
+			}
+
+			rs.close();
+			ps.close();
+
+		} catch (SQLException ex) {
+			ex.getMessage();
+		} catch (IOException ex) {
+			ex.getMessage();
+		}
+
+		return owners;
 	}
 
 }

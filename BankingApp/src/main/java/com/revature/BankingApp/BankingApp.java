@@ -247,28 +247,15 @@ public class BankingApp {
 	}
 
 	public static boolean checkAvailability(String input) {
-		boolean avail = true;
-
+		
 		UserDAO uDAO = new UserDAO();
 		User u = uDAO.checkForUser(input);
 		if (u == null) {
 			return true;
 		}
-		else if (u != null) {
+		else {
 			return false;
 		}
-
-//		for (User iUser : userList) {
-//			if (userList.size() != 1) {
-//				if (iUser.username.equals(input)) {
-//					return false;
-//				}
-//			} else {
-//				return true;
-//			}
-//		}
-
-		return avail;
 	}
 
 	public static void main(String[] args) {

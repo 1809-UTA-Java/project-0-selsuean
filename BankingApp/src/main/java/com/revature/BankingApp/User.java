@@ -101,7 +101,7 @@ public class User {
 		for (Account acc : this.accountList) {
 			System.out.println("Account type: " + acc.accountType + "\n" + "Amount: " + acc.amount + "\n"
 					+ "Number of owners: " + acc.numOwner + "\n ");
-			acc.getOwners();
+		//	acc.getOwners();
 		}
 	}
 
