@@ -101,18 +101,24 @@ public class BankingApp {
 			actionPage(currUser, sc);
 
 		} else if (ans == 3) {
-			// TODO: terminal dialogue
-			currUser.createApplication("Normal");
-
+			// TODO: terminal dialogue; add check in dao for more than one type application pending 
+			currUser.createApplication("Normal", currUser);
+			actionPage(currUser, sc);
+			
 		} else if (ans == 4) {
 			// TODO: terminal dialogue
-			currUser.createApplication("Joint");
+			currUser.createApplication("Joint", currUser);
+			actionPage(currUser, sc);
+			
 		} else if (ans == 5) {
 			actionMoney("deposit", currUser, sc);
+			
 		} else if (ans == 6) {
 			actionMoney("withdraw", currUser, sc);
+			
 		} else if (ans == 7) {
 			actionMoney("transfer", currUser, sc);
+			
 		} else {
 			System.out.println("Input out of range. Please enter numbers 1-7 according to your desired action.\n");
 			actionPage(currUser, sc);
@@ -128,13 +134,16 @@ public class BankingApp {
 			if (action.equals("deposit")) {
 				System.out.println("Please enter the account ID of the account you would like to deposit into."
 						+ " Your accounts are listed below. \n");
+				
 				currUser.displayAccInfo();
+				
 				int ans = sc.nextInt();
+				
 				Account thisAcc = currUser.getAccount(ans);
 
 				System.out.println("How much would you like to deposit?");
 				double depAm = sc.nextInt();
-				currUser.depositMoney(thisAcc, depAm);
+				currUser.depositMoney(currUser, thisAcc, depAm);
 				actionPage(currUser, sc);
 
 			} else if (action.equals("withdraw")) {

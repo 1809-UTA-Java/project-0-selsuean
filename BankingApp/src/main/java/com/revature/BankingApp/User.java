@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.revature.BankingApp.repository.AccountDAO;
+import com.revature.BankingApp.repository.AppDAO;
 
 public class User {
 
@@ -78,11 +79,15 @@ public class User {
 		this.city = city;
 	}
 	
-	public void createApplication(String aType) {
+	public String createApplication(String aType, User user) {
 		Application newApp = new Application();
 		newApp.appType = aType;
-		newApp.approved = false;
-		appList.add(newApp);
+		newApp.approved = "n";
+		
+		AppDAO appdao = new AppDAO();
+		return appdao.insertApp(user.username, newApp);
+		
+		//appList.add(newApp);
 	}
 
 	public void displayUserInfo() {
@@ -123,9 +128,14 @@ public class User {
 		return this.accountList.size();
 	}
 
-	public double depositMoney(Account acc, double amount) {
+	public double depositMoney(User usr, Account acc, double amount) {
 		acc.amount = acc.amount + amount;
 
+		AccountDAO adao = new AccountDAO();
+		adao.updateAccount(acc.amount, acc.accountID);
+		
+		accountList = adao.getAccounts(usr.username);
+		
 		return acc.amount;
 	}
 

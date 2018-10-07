@@ -14,7 +14,7 @@ import com.revature.BankingApp.db.ConnectionUtil;
 
 public class AccountDAO {
 
-	public String insertUser(Account acc) {
+	public String insertAccount(Account acc) {
 		PreparedStatement ps = null;
 
 		try (Connection conn = ConnectionUtil.getConnection()) {
@@ -80,6 +80,28 @@ public class AccountDAO {
 		}
 
 		return accounts;
+	}
+	
+	public String updateAccount(double amt, int acc) {
+		PreparedStatement ps = null;
+		
+		try (Connection conn = ConnectionUtil.getConnection()) {
+			String sql = "UPDATE Accounts SET amount = ? WHERE accountID = ?";
+			ps = conn.prepareStatement(sql);
+			
+			ps.setDouble(1, amt);
+			ps.setInt(2, acc);
+			
+			ps.executeUpdate();
+			ps.close();
+			
+		} catch (SQLException ex) {
+			ex.getMessage();
+		} catch (IOException ex) {
+			ex.getMessage();
+		}
+		
+		return "";
 	}
 	
 	public List<String> getOwners(int accountID) {

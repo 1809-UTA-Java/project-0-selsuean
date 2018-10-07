@@ -2,21 +2,45 @@ package com.revature.BankingApp;
 
 public class Application {
 	protected String appType;
-	protected boolean approved;
+	protected String approved;
+	protected int appID;
 	
-	public Application(String appType, boolean approved) {
+	public Application(String appType, String approved, int appID) {
 		super();
 		this.appType = appType;
 		this.approved = approved;
+		this.appID = appID;
 	} 
-	
-	public Application() {}
 
-	public boolean isApproved() {
+	public Application() {}
+	
+	
+
+	public String getAppType() {
+		return appType;
+	}
+
+	public void setAppType(String appType) {
+		this.appType = appType;
+	}
+
+	public int getAppID() {
+		return appID;
+	}
+
+	public void setAppID(int appID) {
+		this.appID = appID;
+	}
+
+	public String getApproved() {
 		return approved;
 	}
 
-	public void setApproved(boolean approved) {
+	public String appStatus() {
+		return approved;
+	}
+
+	public void setApproved(String approved) {
 		this.approved = approved;
 	}
 	
