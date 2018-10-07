@@ -82,7 +82,7 @@ public class BankingApp {
 		System.out.println(
 				"What would you like to do?\n" + "1 - View user information.\n" + "2 - View account information.\n"
 						+ "3 - Apply to create an account.\n" + "4 - Apply to a joint account.\n"
-						+ "5 - Deposit from an account.\n" + "6 - Withdraw from an account.\n" + "7 - Transfer money.");
+						+ "5 - Deposit into an account.\n" + "6 - Withdraw from an account.\n" + "7 - Transfer money.");
 
 		int ans = sc.nextInt();
 
@@ -143,7 +143,10 @@ public class BankingApp {
 
 				System.out.println("How much would you like to deposit?");
 				double depAm = sc.nextInt();
-				currUser.depositMoney(currUser, thisAcc, depAm);
+				
+				double output = currUser.depositMoney(currUser, thisAcc, depAm);
+				System.out.println("$" + output + " deposited into " + thisAcc.accountType);
+				
 				actionPage(currUser, sc);
 
 			} else if (action.equals("withdraw")) {
@@ -153,14 +156,14 @@ public class BankingApp {
 				int ans = sc.nextInt();
 				Account thisAcc = currUser.getAccount(ans);
 
-				System.out.println("How much would you like to deposit?");
+				System.out.println("How much would you like to withdraw?");
 				double withAm = sc.nextInt();
 				if ((thisAcc.amount - withAm) < 0) {
 					System.out.println(
 							"Withdrawing this amount will make your account balance negative. Please withdraw a smaller amount or deposit more money into this account first \n");
 					actionPage(currUser, sc);
 				} else {
-					currUser.withdrawMoney(thisAcc, withAm);
+					currUser.withdrawMoney(currUser, thisAcc, withAm);
 				}
 
 			} else if (action.equals("transfer")) {
@@ -169,13 +172,23 @@ public class BankingApp {
 				currUser.displayAccInfo();
 				int transF = sc.nextInt();
 				Account accSource = currUser.getAccount(transF);
+
+				System.out.println("How much would you like to transfer?");
+				double amt = sc.nextInt();
 				// check if there's enough money in accSource to transfer
+				if ((accSource.amount - amt) < 0) {
+					System.out.println(
+							"Withdrawing this amount will make your account balance negative. Please withdraw a smaller amount or deposit more money into this account first \n");
+					actionPage(currUser, sc);
+				} 
 
 				System.out.println("Please enter the account ID of the account you would like to transfer to."
 						+ " Your accounts are listed below. \n");
 				currUser.displayAccInfo();
 				int transT = sc.nextInt();
 				Account accDest = currUser.getAccount(transT);
+				
+				currUser.transferMoney(currUser, accSource, accDest, amt);
 				// TODO: finish
 			}
 		}

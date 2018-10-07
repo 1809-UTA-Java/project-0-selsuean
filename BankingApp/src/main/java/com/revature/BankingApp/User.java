@@ -139,16 +139,27 @@ public class User {
 		return acc.amount;
 	}
 
-	public double withdrawMoney(Account acc, double amount) {
+	public double withdrawMoney(User usr, Account acc, double amount) {
 		acc.amount = acc.amount - amount;
 
+		AccountDAO accdao = new AccountDAO();
+		accdao.updateAccount(acc.amount, acc.accountID);
+		
+		accountList = accdao.getAccounts(usr.username);
+		
 		return acc.amount;
 	}
 
-	public String transferMoney(Account acc1, Account acc2, double amount) {
+	public String transferMoney(User usr, Account acc1, Account acc2, double amount) {
 		acc1.amount = acc1.amount - amount;
 
 		acc2.amount = acc2.amount + amount;
+		
+		AccountDAO accdao = new AccountDAO();
+		accdao.updateAccount(acc1.amount, acc1.accountID);
+		accdao.updateAccount(acc2.amount, acc2.accountID);
+		
+		accountList = accdao.getAccounts(usr.username);
 
 		String message = acc1.accountType + ": " + String.valueOf(acc1.amount) + "\n" + acc2.accountType + ": "
 				+ String.valueOf(acc2.amount);
