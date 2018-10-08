@@ -3,8 +3,6 @@ package com.revature.BankingApp;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.revature.BankingApp.repository.AccountDAO;
-
 public class Account {
 	protected int accountID;
 	protected String accountType;

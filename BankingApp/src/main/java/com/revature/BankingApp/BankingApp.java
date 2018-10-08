@@ -145,7 +145,7 @@ public class BankingApp {
 				double depAm = sc.nextInt();
 				
 				double output = currUser.depositMoney(currUser, thisAcc, depAm);
-				System.out.println("$" + output + " deposited into " + thisAcc.accountType);
+				System.out.println("Balance in " + thisAcc.accountType + " is now $" + output);
 				
 				actionPage(currUser, sc);
 
@@ -163,7 +163,10 @@ public class BankingApp {
 							"Withdrawing this amount will make your account balance negative. Please withdraw a smaller amount or deposit more money into this account first \n");
 					actionPage(currUser, sc);
 				} else {
-					currUser.withdrawMoney(currUser, thisAcc, withAm);
+					double wOutput = currUser.withdrawMoney(currUser, thisAcc, withAm);
+					System.out.println("Balance in " + thisAcc.accountType + " is now $" + wOutput);
+					
+					actionPage(currUser, sc);
 				}
 
 			} else if (action.equals("transfer")) {
@@ -188,8 +191,9 @@ public class BankingApp {
 				int transT = sc.nextInt();
 				Account accDest = currUser.getAccount(transT);
 				
-				currUser.transferMoney(currUser, accSource, accDest, amt);
-				// TODO: finish
+				String prMes = currUser.transferMoney(currUser, accSource, accDest, amt);
+				System.out.println(prMes);
+				actionPage(currUser, sc);
 			}
 		}
 	}

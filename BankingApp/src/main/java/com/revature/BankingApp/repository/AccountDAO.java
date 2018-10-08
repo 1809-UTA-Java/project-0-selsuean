@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.revature.BankingApp.Account;
-import com.revature.BankingApp.User;
 import com.revature.BankingApp.db.ConnectionUtil;
 
 public class AccountDAO {
@@ -26,7 +25,6 @@ public class AccountDAO {
 			ps.setDouble(3, acc.getAmount());
 
 			ps.executeUpdate();
-			;
 			ps.close();
 		} catch (SQLException ex) {
 			ex.getMessage();
