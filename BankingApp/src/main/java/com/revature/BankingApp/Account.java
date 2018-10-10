@@ -7,6 +7,7 @@ public class Account {
 	protected int accountID;
 	protected String accountType;
 	protected double amount;
+	protected boolean approved;
 
 	protected List<String> owner = new ArrayList<>();
 	protected int numOwner;
@@ -19,11 +20,12 @@ public class Account {
 //	    owner = adao.getOwners(accID);
 //	}
 
-	public Account(int accountID, String accountType, double amount) {
+	public Account(int accountID, String accountType, double amount, boolean approved) {
 		super();
 		this.accountID = accountID;
 		this.accountType = accountType;
 		this.amount = amount;
+		this.approved = approved; 
 	}
 
 	public int getAccountID() {

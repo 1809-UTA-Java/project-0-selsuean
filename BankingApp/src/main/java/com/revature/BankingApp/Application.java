@@ -1,12 +1,14 @@
 package com.revature.BankingApp;
 
 public class Application {
+	protected String username;
 	protected String appType;
 	protected String approved;
 	protected int appID;
 	
-	public Application(String appType, String approved, int appID) {
+	public Application(String username, String appType, String approved, int appID) {
 		super();
+		this.username = username;
 		this.appType = appType;
 		this.approved = approved;
 		this.appID = appID;
