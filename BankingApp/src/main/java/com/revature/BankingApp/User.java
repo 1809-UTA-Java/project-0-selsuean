@@ -4,16 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.revature.BankingApp.repository.AccountDAO;
-import com.revature.BankingApp.repository.AppDAO;
 
-public class User {
+public class User extends Person {
 
-	protected String name;
-	protected String username;
-	protected String password;
 	protected String birthday;
 	protected int age;
 	protected String city;
+	protected String role;
 
 	protected List<Account> accountList = new ArrayList<Account>();
 	protected static ArrayList<Application> appList = new ArrayList<Application>();
@@ -21,40 +18,18 @@ public class User {
 	public User() {
 	}
 
-	public User(String name, String username, String password, String birthday, int age, String city) {
-		super();
-		this.name = name;
-		this.username = username;
-		this.password = password;
+	public User(String name, String username, String password, String birthday, int age, String city, String role) {
+		super(name, username, password);
 		this.birthday = birthday;
 		this.age = age;
 		this.city = city;
+		this.role = role;
 	}
 
-	public String getName() {
-		return name;
+	public String getRole() {
+		return role;
 	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void getPassword(String password) {
-		this.password = password;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
+	
 	public String getBirthday() {
 		return birthday;
 	}
@@ -79,15 +54,15 @@ public class User {
 		this.city = city;
 	}
 	
-	public String createApplication(String aType, User user) {
-		Application newApp = new Application();
-		newApp.appType = aType;
-		newApp.approved = "n";
-		
-		AppDAO appdao = new AppDAO();
-		return appdao.insertApp(user.username, newApp);
-		
-		//appList.add(newApp);
+	public String createApplication(String aType, User currUser) {
+		AccountDAO accdao = new AccountDAO();
+		AccountDAO accdao2 = new AccountDAO();
+
+		int temp = 1 + accdao2.getMax();
+		accdao.insertAccount(temp, aType);
+		accdao.insertJunction(currUser.username, temp);
+	
+		return "Application created.";
 	}
 
 	public void displayUserInfo() {

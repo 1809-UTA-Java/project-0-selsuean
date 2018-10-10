@@ -8,9 +8,23 @@ package com.revature.BankingApp;
 public class Admin extends Person {
 
 	
+	
+	public Admin() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+
+	public Admin(String name, String username, String password) {
+		super(name, username, password);
+		// TODO Auto-generated constructor stub
+	}
+
+
 	public void createNewAccount(boolean approved) {
 		
 	}
+	
 	
 	public void withdraw() {
 		
