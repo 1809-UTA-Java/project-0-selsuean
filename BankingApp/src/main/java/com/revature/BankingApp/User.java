@@ -11,6 +11,7 @@ public class User extends Person {
 	protected int age;
 	protected String city;
 	protected String role;
+	protected String jInvite;
 
 	protected List<Account> accountList = new ArrayList<Account>();
 	protected static ArrayList<Application> appList = new ArrayList<Application>();
@@ -18,14 +19,19 @@ public class User extends Person {
 	public User() {
 	}
 
-	public User(String name, String username, String password, String birthday, int age, String city, String role) {
+	public User(String name, String username, String password, String birthday, int age, String city, String role, String jInvite) {
 		super(name, username, password);
 		this.birthday = birthday;
 		this.age = age;
 		this.city = city;
 		this.role = role;
+		this.jInvite = jInvite;
 	}
 
+	public String getJInvite() {
+		return jInvite;
+	}
+	
 	public String getRole() {
 		return role;
 	}
@@ -64,6 +70,17 @@ public class User extends Person {
 	
 		return "Application created.";
 	}
+	
+	public String createApplication(String aType, User currUser, String inviteUser) {
+		AccountDAO accdao = new AccountDAO();
+		AccountDAO accdao2 = new AccountDAO();
+
+		int temp = 1 + accdao2.getMax();
+		accdao.insertAccount(temp, aType);
+		accdao.insertJunction(currUser.username, temp);
+		accdao.insertJunction(inviteUser, temp);
+		return "Application created, invitation extended to " + inviteUser;
+	}
 
 	public void displayUserInfo() {
 		System.out.println("Name: " + this.name + "\n" + "Username: " + this.username + "\n" + "Age: " + this.age + "\n"
@@ -80,7 +97,7 @@ public class User extends Person {
 		
 		for (Account acc : this.accountList) {
 			System.out.println("Account ID: " + acc.accountID + "\n" + "Account type: " + acc.accountType + "\n" + "Amount: " + acc.amount + "\n"
-					+ "Number of owners: " + acc.numOwner + "\n ");
+					+ "Status: " + acc.approved + "\n ");
 		//	acc.getOwners();
 		}
 	}

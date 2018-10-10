@@ -34,7 +34,6 @@ public class AccountDAO {
 		}
 	}
 
-	// TODO: insert into junctions (username, accid)
 	
 	public void insertJunction(String username, int accID) {
 		PreparedStatement ps = null;

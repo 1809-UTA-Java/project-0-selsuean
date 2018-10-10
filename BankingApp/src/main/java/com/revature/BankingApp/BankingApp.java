@@ -65,7 +65,7 @@ public class BankingApp {
 		
 		else if (p instanceof User) {
 			User u = (User) p;
-			u.setAccountList(username);
+			//u.setAccountList(username);
 			actionPage(u, sc);
 		}
 
@@ -201,7 +201,7 @@ public class BankingApp {
 	}
 
 	public static void actionPage(User currUser, Scanner sc) {
-
+		currUser.setAccountList(currUser.username);
 		int ans = Menu.customerView(sc, currUser);
 
 		switch (ans) {
@@ -224,11 +224,12 @@ public class BankingApp {
 			// TODO: terminal dialogue; add check in dao for more than one type application
 			// pending
 			System.out.println("Would you like a checkings or a savings account?");
-			if (sc.next().equals("checkings")) {
+			String ansTypeAcc = sc.next();
+			if (ansTypeAcc.equals("checkings")) {
 				System.out.println(currUser.createApplication("checkings", currUser));
 				actionPage(currUser, sc);
 			}
-			else if (sc.next().equals("savings")) {
+			else if (ansTypeAcc.equals("savings")) {
 				System.out.println(currUser.createApplication("savings", currUser));
 				actionPage(currUser, sc);
 			}
@@ -239,7 +240,18 @@ public class BankingApp {
 			break;
 
 		case 4:
-			System.out.println(currUser.createApplication("Joint", currUser));
+			System.out.println("Who would you like to invite to this joint account? Please enter their username.");
+			String JUsername = sc.next();
+			
+//			UserDAO judao = new UserDAO();
+//			Person tempU = judao.checkForUser(JUsername);
+//			
+//			if (tempU == null) {
+//				System.out.println("Username does not exist. Please try again.");
+//				actionPage(currUser, sc);
+//			}
+//			
+			System.out.println(currUser.createApplication("Joint", currUser, JUsername));
 			actionPage(currUser, sc);
 			break;
 

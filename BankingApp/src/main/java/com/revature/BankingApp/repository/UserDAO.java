@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.revature.BankingApp.Account;
 import com.revature.BankingApp.Admin;
 import com.revature.BankingApp.Employee;
 import com.revature.BankingApp.Person;
@@ -17,19 +16,11 @@ import com.revature.BankingApp.db.ConnectionUtil;
 
 public class UserDAO {
 
-	/**
-	 * User object passed into method gets inserted into db
-	 * 
-	 * Columns: username (PK), password, name, age, birthday, city
-	 * 
-	 * @param usr
-	 * @return usr.getName() + " inserted into system."
-	 */
 	public String insertUser(User usr) {
 		PreparedStatement ps = null;
 
 		try (Connection conn = ConnectionUtil.getConnection()) {
-			String sql = "INSERT INTO Users VALUES (?,?,?,?,?,?, ?)";
+			String sql = "INSERT INTO Users VALUES (?,?,?,?,?,?,?,?)";
 			ps = conn.prepareStatement(sql);
 
 			ps.setString(1, usr.getUsername());
@@ -39,6 +30,7 @@ public class UserDAO {
 			ps.setString(5, usr.getBirthday());
 			ps.setString(6, usr.getCity());
 			ps.setString(7, "C");
+			ps.setString(8, null);
 
 			ps.executeUpdate();
 			ps.close();
@@ -81,16 +73,17 @@ public class UserDAO {
 				int age = rs.getInt("age");
 				String city = rs.getString("city");
 				String role = rs.getString("role");
+				String jInvite = rs.getString("j_invite");
 
 				if (role.equals("A")) {
 					a = new Admin(name, username, password);
 					return a;
 				}
 				if (role.equals("E")) {
-					e = new Employee(name, username, password, birthday, age, city, role);
+					e = new Employee(name, username, password, birthday, age, city, role, jInvite);
 					return e;
 				} else if (role.equals("C")) {
-					u = new User(name, username, password, birthday, age, city, role);
+					u = new User(name, username, password, birthday, age, city, role, jInvite);
 					return u;
 				}
 
@@ -111,8 +104,6 @@ public class UserDAO {
 	public User checkUsername(String identifier) {
 		PreparedStatement ps = null;
 		User u = null;
-		Admin a = null;
-		Employee e = null;
 
 		try (Connection conn = ConnectionUtil.getConnection()) {
 			String sql = "SELECT * FROM USERS WHERE USERNAME = ?";
@@ -129,8 +120,9 @@ public class UserDAO {
 				int age = rs.getInt("age");
 				String city = rs.getString("city");
 				String role = rs.getString("role");
+				String jInvite = rs.getString("j_invite");
 
-				u = new User(name, username, password, birthday, age, city, role);
+				u = new User(name, username, password, birthday, age, city, role, jInvite);
 
 			}
 
@@ -166,8 +158,9 @@ public class UserDAO {
 				int age = rs.getInt("age");
 				String city = rs.getString("city");
 				String role = rs.getString("role");
+				String jInvite = rs.getString("j_invite");
 				
-				u = new User(name, username, password, birthday, age, city, role);
+				u = new User(name, username, password, birthday, age, city, role, jInvite);
 				users.add(u);
 			}
 
