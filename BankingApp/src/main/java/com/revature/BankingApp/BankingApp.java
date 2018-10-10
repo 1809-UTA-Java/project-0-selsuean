@@ -62,10 +62,8 @@ public class BankingApp {
 			empAction(e, sc);
 		}
 
-		
 		else if (p instanceof User) {
 			User u = (User) p;
-			//u.setAccountList(username);
 			actionPage(u, sc);
 		}
 
@@ -74,66 +72,66 @@ public class BankingApp {
 			adminAction(a, sc);
 		}
 	}
-	
+
 //	"1 - View a user's information.\n" + 
 //	"2 - View a user's account information.\n" +
 //	"3 - Take action on open applications.\n
 	public static void empAction(Employee e, Scanner sc) {
 		int ans = Menu.employeeView(sc, e);
-		
+
 		switch (ans) {
 		case 1:
 			Employee.viewUserInfo();
 			empAction(e, sc);
 			break;
-			
+
 		case 2:
 			System.out.println("Enter a username to receive the list of accounts under their name: ");
 			String username = sc.next();
 			Employee.viewAccountInfo(username);
 			empAction(e, sc);
 			break;
-			
+
 		case 3:
 			System.out.println("The users below have submitted applications to open an account: \n ");
 			List<Object> thisAppList = Employee.approveApplication("false");
 			if (thisAppList.isEmpty()) {
 				System.out.println("There are currently no open applications.");
 				empAction(e, sc);
-			}
-			else {
-			for (Object obj : thisAppList) {
-				if (obj instanceof String) {
-					System.out.println("Username: " + obj + "  ");
+			} else {
+				for (Object obj : thisAppList) {
+					if (obj instanceof String) {
+						System.out.println("Username: " + obj + "  ");
+					}
+					if (obj instanceof Integer) {
+						System.out.println("AccountID: " + obj + "\n");
+					}
 				}
-				if (obj instanceof Integer) {
-					System.out.println("AccountID: " + obj + "\n");
-				}
 			}
-			}
-			
+
 			AccountDAO accdao = new AccountDAO();
-			
-			System.out.println("Enter a username to review their account information. Else, enter an account ID to approve the application. \n");
+
+			System.out.println(
+					"Enter a username to review their account information. Else, enter an account ID to approve the application. \n");
 			if (sc.hasNextInt()) {
 				System.out.println("Updating application...");
-				System.out.println(accdao.updateApplicationStatus(sc.nextInt(), "pend"));	
+				System.out.println(accdao.updateApplicationStatus(sc.nextInt(), "pend"));
 				empAction(e, sc);
 			}
 			if (sc.hasNext()) {
 				Employee.viewAccountInfo(sc.next());
 				empAction(e, sc);
 			}
-			
+
 			else {
 				System.out.println("Invalid input. Please try again.");
 			}
-		
+
 			break;
-			
+
 		default:
-				System.out.println("Invalid output. Please try again.");
-				empAction(e, sc);
+			System.out.println("Invalid output. Please try again.");
+			empAction(e, sc);
 			break;
 		}
 	}
@@ -146,53 +144,78 @@ public class BankingApp {
 		int ans = Menu.adminView(sc, a);
 		switch (ans) {
 		case 1:
-			System.out.println("The users below have submitted applications to open an account: \n ");
+		//	System.out.println("The users below have submitted applications to open an account: \n ");
 			Employee.viewUserInfo();
 			adminAction(a, sc);
 			break;
-			
+
 		case 2:
 			System.out.println("Enter a username to receive the list of accounts under their name: ");
 			String username = sc.next();
 			Employee.viewAccountInfo(username);
+			
 			adminAction(a, sc);
 			break;
-			
+
 		case 3:
+			System.out.println("Enter a username to take action on that person's account: ");
+			String revUser = sc.next();
 			
+			UserDAO audao = new UserDAO();
+			User thisPerson = audao.checkUsername(revUser);
+			
+			System.out.println("What action would you like to take? Deposit, withdraw, or transfer?");
+			String anAction = sc.next();
+			
+			switch (anAction) {
+			case "deposit":
+				actionMoney("deposit", thisPerson, sc);
+				break;
+			case "withdraw":
+				actionMoney("withdraw", thisPerson, sc);
+				break;
+			case "transfer":
+				actionMoney("transfer", thisPerson, sc);
+				break;
+				default:
+					System.out.println("Did not recognize choice. Please try again.");
+					adminAction(a, sc);
+					break;
+			}
+						
 			break;
-		
+
 		case 4:
 			List<Object> thisAppList = Employee.approveApplication("pend");
 			System.out.println("The users below have pending applications to open an account: \n ");
-			
+
 			if (thisAppList.isEmpty()) {
 				System.out.println("There are currently no pending applications.");
 				adminAction(a, sc);
-			}
-			else {
-			for (Object obj : thisAppList) {
-				if (obj instanceof String) {
-					System.out.println("Username: " + obj + "  ");
+			} else {
+				for (Object obj : thisAppList) {
+					if (obj instanceof String) {
+						System.out.println("Username: " + obj + "  ");
+					}
+					if (obj instanceof Integer) {
+						System.out.println("AccountID: " + obj + "\n");
+					}
 				}
-				if (obj instanceof Integer) {
-					System.out.println("AccountID: " + obj + "\n");
-				}
-			}
 			}
 			AccountDAO accdao = new AccountDAO();
-			
-			System.out.println("Enter a username to review their account information. Else, enter an account ID to open the account. \n");
+
+			System.out.println(
+					"Enter a username to review their account information. Else, enter an account ID to open the account. \n");
 			if (sc.hasNextInt()) {
 				System.out.println("Creating account...");
-				System.out.println(accdao.updateApplicationStatus(sc.nextInt(), "true"));	
+				System.out.println(accdao.updateApplicationStatus(sc.nextInt(), "true"));
 				adminAction(a, sc);
 			}
 			if (sc.hasNext()) {
 				Employee.viewAccountInfo(sc.next());
 				adminAction(a, sc);
 			}
-			
+
 			else {
 				System.out.println("Invalid input. Please try again.");
 			}
@@ -228,12 +251,10 @@ public class BankingApp {
 			if (ansTypeAcc.equals("checkings")) {
 				System.out.println(currUser.createApplication("checkings", currUser));
 				actionPage(currUser, sc);
-			}
-			else if (ansTypeAcc.equals("savings")) {
+			} else if (ansTypeAcc.equals("savings")) {
 				System.out.println(currUser.createApplication("savings", currUser));
 				actionPage(currUser, sc);
-			}
-			else {
+			} else {
 				System.out.println("Input not within range, please try again.");
 				actionPage(currUser, sc);
 			}
@@ -242,17 +263,18 @@ public class BankingApp {
 		case 4:
 			System.out.println("Who would you like to invite to this joint account? Please enter their username.");
 			String JUsername = sc.next();
+
+			UserDAO judao = new UserDAO();
+			Person tempU = judao.checkForUser(JUsername);
 			
-//			UserDAO judao = new UserDAO();
-//			Person tempU = judao.checkForUser(JUsername);
-//			
-//			if (tempU == null) {
-//				System.out.println("Username does not exist. Please try again.");
-//				actionPage(currUser, sc);
-//			}
-//			
+			if (tempU == null) {
+				System.out.println("Username does not exist. Please try again.");
+				actionPage(currUser, sc);
+			} else {
+			
 			System.out.println(currUser.createApplication("Joint", currUser, JUsername));
 			actionPage(currUser, sc);
+			}
 			break;
 
 		case 5:
@@ -292,6 +314,10 @@ public class BankingApp {
 
 				System.out.println("How much would you like to deposit?");
 				double depAm = sc.nextInt();
+				if (depAm <= 0) {
+					System.out.println("You cannot deposit 0 or negative dollars. Please try again.");
+					actionPage(currUser, sc);
+				}
 
 				double output = currUser.depositMoney(currUser, thisAcc, depAm);
 				System.out.println("Balance in " + thisAcc.accountType + " is now $" + output);
@@ -303,10 +329,18 @@ public class BankingApp {
 						+ " Your accounts are listed below. \n");
 				currUser.displayAccInfo();
 				int ans = sc.nextInt();
+				if (ans <= 0) {
+					System.out.println("You cannot withdraw 0 or negative dollars. Please try again.");
+					actionPage(currUser, sc);
+				}
 				Account thisAcc = currUser.getAccount(ans);
 
 				System.out.println("How much would you like to withdraw?");
 				double withAm = sc.nextInt();
+				if (withAm <= 0) {
+					System.out.println("You cannot withdraw 0 or negative dollars. Please try again.");
+					actionPage(currUser, sc);
+				}
 				if ((thisAcc.amount - withAm) < 0) {
 					System.out.println(
 							"Withdrawing this amount will make your account balance negative. Please withdraw a smaller amount or deposit more money into this account first \n");
